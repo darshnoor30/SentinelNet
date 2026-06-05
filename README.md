@@ -44,7 +44,12 @@ SentinelNet is a SOC-inspired cybersecurity monitoring platform built using Pyth
 
 ### Threat Analytics
 
-![Analytics](screenshots/dashboard_analytics.png)
+![Analytics 1](screenshots/dashboard_analytics_1.png)
+
+![Analytics 2](screenshots/dashboard_analytics_2.png)
+
+![Analytics 3](screenshots/dashboard_analytics_3.png)
+
 
 ### Threat Timeline & Intelligence
 
