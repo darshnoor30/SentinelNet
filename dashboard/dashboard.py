@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+from streamlit_autorefresh import st_autorefresh
+
 
 # =====================================================
 # PAGE CONFIG
@@ -11,6 +13,10 @@ st.set_page_config(
     page_title="SentinelNet SOC Dashboard",
     page_icon="🛡",
     layout="wide"
+)
+st_autorefresh(
+    interval=5000,
+    key="sentinel_refresh"
 )
 
 st.title("🛡 SentinelNet Security Operations Center")
@@ -216,8 +222,15 @@ st.divider()
 
 st.subheader("🧠 Threat Intelligence Summary")
 
-most_common_port = df["Port"].mode()[0]
-most_common_severity = df["Severity"].mode()[0]
+if "Port" in df.columns and not df["Port"].empty:
+    most_common_port = df["Port"].mode()[0]
+else:
+    most_common_port = "N/A"
+
+if "Severity" in df.columns and not df["Severity"].empty:
+    most_common_severity = df["Severity"].mode()[0]
+else:
+    most_common_severity = "Unknown"
 
 port_mapping = {
     21: "FTP",
@@ -250,5 +263,5 @@ if "SourceIP" in df.columns:
 
 st.markdown("---")
 st.caption(
-    "SentinelNet v1.0 | Security Operations Center Dashboard | Developed by Darshnoor Kaur"
+    "SOC-Inspired Real-Time Network Threat Detection, Security Analytics and Incident Monitoring Platform"
 )
