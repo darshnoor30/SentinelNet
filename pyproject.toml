@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinelnet-soc"
+version = "1.0.0"
+description = "Explainable network threat detection and SOC analytics dashboard"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "Darshnoor Kaur"}]
+keywords = ["cybersecurity", "network-monitoring", "soc", "threat-detection", "scapy"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Education",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security",
+]
+dependencies = [
+  "pandas>=2.2,<4",
+  "plotly>=5.24,<7",
+  "scapy>=2.6,<3",
+  "streamlit>=1.42,<2",
+  "streamlit-autorefresh>=1.0.1,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.11,<1",
+]
+
+[project.urls]
+Repository = "https://github.com/darshnoor30/SentinelNet"
+Issues = "https://github.com/darshnoor30/SentinelNet/issues"
+
+[tool.setuptools]
+packages = ["analytics", "dashboard", "detection_engine", "packet_capture", "scripts"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --strict-config"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

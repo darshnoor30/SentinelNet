@@ -1,6 +1,29 @@
+# Python
 __pycache__/
-*.pyc
-venv/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Runtime telemetry (may contain sensitive network metadata)
 alerts/*.csv
 logs/*.csv
+
+# Generated reports and local secrets
+reports/*.pdf
+.env
+.env.*
+!.env.example

@@ -1,332 +1,228 @@
+<div align="center">
+
 # SentinelNet
 
-## Real-Time Network Threat Detection and Security Monitoring Platform
+### Explainable network threat detection with an analyst-first SOC dashboard
 
-**Cybersecurity • SOC Monitoring • Threat Detection • Network Security • Python • Streamlit • Scapy**
+[![CI](https://github.com/darshnoor30/SentinelNet/actions/workflows/ci.yml/badge.svg)](https://github.com/darshnoor30/SentinelNet/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![MIT License](https://img.shields.io/badge/License-MIT-3DA639.svg)](LICENSE)
+[![Defensive Security](https://img.shields.io/badge/use-defensive%20security-6c8cff)](SECURITY.md)
 
-SentinelNet is a Security Operations Center (SOC)-inspired cybersecurity monitoring platform developed using Python. The platform captures network traffic, detects suspicious activities, generates security alerts, performs threat analytics, and visualizes incidents through an interactive dashboard.
+**Python · Scapy · Streamlit · Plotly · Pandas · Pytest · GitHub Actions**
 
-The project demonstrates practical cybersecurity concepts including packet analysis, threat detection, alert management, security analytics, and automated incident reporting.
+</div>
 
----
+SentinelNet is a portfolio-scale Security Operations Center (SOC) project that
+turns live network metadata into explainable alerts and a filterable analyst
+queue. It combines packet capture, rule-based service detections, rolling
+port-scan analysis, normalized CSV telemetry, and a Streamlit dashboard.
 
-# Project Highlights
+The project is designed to demonstrate more than a visual dashboard: detection
+logic is separated from capture, modules have no import-time capture side
+effects, data contracts are explicit, runtime telemetry is excluded from Git,
+and automated tests run against Python 3.10 and 3.12.
 
-* Real-time network packet monitoring
-* Automated threat detection engine
-* Suspicious port identification
-* Alert logging and incident tracking
-* Interactive SOC dashboard
-* Threat intelligence visualization
-* Automated PDF security reporting
-* Security analytics and trend monitoring
+> **Scope:** SentinelNet is a defensive learning project, not a replacement for
+> an enterprise IDS/IPS or SIEM. A port match is a triage signal—not proof of
+> compromise.
 
-### Testing Results
+## Dashboard
 
-* Total Alerts Generated: **70**
-* Critical Alerts: **28**
-* High Alerts: **28**
-* Medium Alerts: **14**
-* Security Analytics Dashboard Implemented
-* Automated Incident Reporting Enabled
+![SentinelNet SOC dashboard showing severity metrics, threat distribution, and alert data](screenshots/dashboard_main.png)
 
----
+The console auto-refreshes and provides severity/source filters, transparent
+risk scoring, service and timeline analytics, a priority-sorted investigation
+queue, and CSV export.
 
-# Features
+## Try it in under two minutes
 
-## Real-Time Packet Capture
-
-Captures network traffic using Scapy and extracts relevant packet information for security analysis.
-
-## Threat Detection Engine
-
-Analyzes observed ports and services against predefined threat rules to identify suspicious activity.
-
-## Alert Management
-
-Automatically generates and stores security alerts categorized by severity.
-
-## Security Analytics
-
-Processes threat data and generates security insights for analysts.
-
-## Threat Intelligence Summary
-
-Provides a high-level overview of detected threats and risk levels.
-
-## Interactive Dashboard
-
-Visualizes threat statistics, alert distribution, and security trends using Streamlit and Plotly.
-
-## PDF Incident Reporting
-
-Generates structured security reports for documentation and incident response purposes.
-
----
-
-# Technologies Used
-
-| Technology   | Purpose                   |
-| ------------ | ------------------------- |
-| Python       | Core Development          |
-| Scapy        | Packet Capture & Analysis |
-| Pandas       | Data Processing           |
-| Streamlit    | Dashboard Development     |
-| Plotly       | Data Visualization        |
-| ReportLab    | PDF Report Generation     |
-| Git & GitHub | Version Control           |
-
----
-
-# System Architecture
-
-![Architecture](architecture.png)
-
-### Architecture Overview
-
-SentinelNet follows a layered cybersecurity monitoring architecture:
-
-Network Traffic
-
-↓
-
-Packet Capture Layer
-
-↓
-
-Threat Detection Engine
-
-↓
-
-Alert Generation Module
-
-↓
-
-Analytics Engine
-
-↓
-
-Dashboard Interface
-
-↓
-
-Incident Report Generator
-
-This architecture enables real-time threat monitoring, incident detection, security analytics, and reporting.
-
----
-
-# Dashboard Preview
-
-## Main Security Dashboard
-
-![Dashboard](screenshots/dashboard_main.png)
-
-The main dashboard provides a centralized view of security alerts, threat statistics, and overall monitoring status.
-
----
-
-## Threat Severity Distribution
-
-![Analytics](screenshots/dashboard_analytics_1.png)
-
-Displays alert distribution across Critical, High, and Medium severity levels.
-
----
-
-## Security Analytics Overview
-
-![Analytics](screenshots/dashboard_analytics_2.png)
-
-Provides statistical insights into detected threats and monitoring performance.
-
----
-
-## Threat Intelligence Summary
-
-![Analytics](screenshots/dashboard_analytics_3.png)
-
-Summarizes security incidents and highlights high-risk activities.
-
----
-
-## Threat Activity Timeline
-
-![Timeline](screenshots/dashboard_timeline.png)
-
-Visualizes threat occurrence patterns over time to assist with incident investigation.
-
----
-
-# Project Structure
-
-```text
-SentinelNet
-│
-├── alerts
-│   └── alerts.csv
-│
-├── analytics
-│   └── stats.py
-│
-├── dashboard
-│   └── dashboard.py
-│
-├── detection_engine
-│   ├── detector.py
-│   └── port_scan.py
-│
-├── logs
-│   └── network_log.csv
-│
-├── packet_capture
-│   └── capture.py
-│
-├── reports
-│   ├── generate_report.py
-│   └── SentinelNet_Report.pdf
-│
-├── screenshots
-│   ├── dashboard_main.png
-│   ├── dashboard_analytics_1.png
-│   ├── dashboard_analytics_2.png
-│   ├── dashboard_analytics_3.png
-│   └── dashboard_timeline.png
-│
-├── architecture.png
-├── requirements.txt
-└── README.md
-```
-
----
-
-# Installation
-
-Clone the repository:
+The safe demo uses only [IANA documentation address ranges](https://www.rfc-editor.org/rfc/rfc5737)
+and does not require administrator privileges or live packet capture.
 
 ```bash
 git clone https://github.com/darshnoor30/SentinelNet.git
 cd SentinelNet
+python -m venv .venv
 ```
 
-Install dependencies:
+Activate the environment (`.venv\Scripts\activate` on Windows or
+`source .venv/bin/activate` on macOS/Linux), then run:
 
 ```bash
-pip install -r requirements.txt
-```
-
----
-
-# Usage
-
-## Run Packet Capture
-
-```bash
-python packet_capture/capture.py
-```
-
-## Run Threat Detection
-
-```bash
-python test_detector.py
-```
-
-## Run Dashboard
-
-```bash
+python -m pip install -r requirements.txt
+python -m scripts.generate_demo_data
 streamlit run dashboard/dashboard.py
 ```
 
----
+To replace previously generated demo telemetry, use
+`python -m scripts.generate_demo_data --force`. Do not use `--force` on evidence
+you need to retain.
 
-# Security Report
+## Engineering highlights
 
-SentinelNet automatically generates PDF-based incident reports containing:
+| Capability | Implementation | Engineering signal |
+|---|---|---|
+| Packet telemetry | Scapy extracts IP, protocol, and port metadata without intentionally storing payloads | Privacy-aware data minimization |
+| Service rules | Immutable, typed rules generate structured alert objects | Explainable and testable detections |
+| Scan detection | Unique destination ports tracked in a rolling window with per-source cooldown | Stateful behavior with duplicate control |
+| Alert storage | Stable CSV schema with legacy-header compatibility | Explicit contract and safe migration path |
+| SOC console | Filters, metrics, timelines, priority queue, auto-refresh, and export | Analyst-centered product thinking |
+| Quality gates | Ruff, Pytest, coverage threshold, and a two-version CI matrix | Reproducible engineering workflow |
+| Repository hygiene | MIT license, security policy, contribution guide, Dependabot | Open-source readiness |
 
-* Threat statistics
-* Severity breakdown
-* Security score
-* Threat analysis
-* Security recommendations
-* Incident summaries
+## Architecture
 
-Generated Report:
-
-```text
-reports/SentinelNet_Report.pdf
+```mermaid
+flowchart TD
+    A[Authorized network traffic] --> B[Scapy capture]
+    B --> C[Metadata normalization]
+    C --> D{Detection pipeline}
+    D --> E[Service-port rules]
+    D --> F[Rolling scan detector]
+    E --> G[Normalized alert store]
+    F --> G
+    C --> H[Packet metadata log]
+    G --> I[Streamlit SOC console]
+    I --> J[Analyst triage and CSV export]
 ```
 
----
+The capture adapter is intentionally thin. Detection and storage are injected
+into `PacketProcessor`, which keeps the core behavior deterministic and easy to
+exercise with synthetic Scapy packets.
 
-# Skills Demonstrated
+## Detection model
 
-* Python Programming
-* Cybersecurity Fundamentals
-* Network Security
-* Packet Analysis
-* Threat Detection
-* Security Monitoring
-* Incident Reporting
-* Data Analytics
-* Dashboard Development
-* Streamlit Development
-* Git & GitHub
-* Technical Documentation
+SentinelNet currently evaluates **destination** ports. This avoids treating a
+server response from a well-known source port as a second inbound threat.
 
----
+| Signal | Default severity | Analyst rationale |
+|---|---:|---|
+| FTP / 21 | Medium | Cleartext protocol exposure |
+| Telnet / 23 | High | Cleartext remote administration |
+| SMB / 445 | High | Common discovery and lateral-movement surface |
+| RDP / 3389 | Medium | Remote-access activity requiring allowlist context |
+| TCP / 4444 | Critical | Common reverse-shell and security-testing convention |
+| TCP / 1337 | Critical | Unexpected non-standard service requiring validation |
+| 10 unique ports / 60 seconds | High | Potential network discovery; 60-second alert cooldown |
 
-# Challenges Solved
+These rules prioritize explainability. Production-quality detection would add
+asset context, directionality, baselines, protocol inspection, allowlists,
+threat-intelligence enrichment, and correlation across multiple signals.
 
-* Implemented packet capture and traffic inspection
-* Developed custom threat detection logic
-* Managed alert classification and logging
-* Built interactive security analytics dashboards
-* Generated automated security reports
-* Organized project structure for maintainability
-* Integrated multiple cybersecurity components into a single platform
+## Repository layout
 
----
+```text
+SentinelNet/
+├── .github/                 # CI, Dependabot, and PR quality checklist
+├── analytics/               # Reusable alert summary functions and CLI
+├── dashboard/               # Streamlit SOC console
+├── detection_engine/        # Service rules, alert model/store, scan detector
+├── packet_capture/          # Scapy adapter and packet metadata logger
+├── scripts/                 # Safe deterministic demo-data generator
+├── screenshots/             # Recruiter-facing product preview
+├── tests/                   # Unit and integration-style packet tests
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── pyproject.toml
+└── requirements.txt
+```
 
-# Future Enhancements
+Runtime files are created only when needed:
 
-* Machine Learning-Based Threat Detection
-* Threat Intelligence Integration
-* SIEM Integration
-* Cloud Deployment
-* Email Alerting System
-* Automated Incident Response
-* Database-Based Alert Storage
-* Real-Time Notification Services
-* Advanced Security Analytics
+- `alerts/alerts.csv` — normalized detections used by the dashboard
+- `logs/network_log.csv` — packet metadata (no intentional payload storage)
 
----
+Both paths are ignored by Git because network telemetry can be sensitive.
 
-# Learning Outcomes
+## Run authorized live capture
 
-Through the development of SentinelNet, the following practical skills were gained:
+Packet capture may require an elevated terminal. Windows users should install
+[Npcap](https://npcap.com/) with WinPcap API compatibility; Linux/macOS users
+need a working libpcap installation.
 
-* Understanding Security Operations Center workflows
-* Network packet inspection techniques
-* Threat classification methodologies
-* Security dashboard design
-* Incident reporting processes
-* Cybersecurity project development
-* Open-source security tool integration
+```bash
+python -m packet_capture.capture --count 100
+```
 
----
+Useful options:
 
-# Developer
+```text
+--interface NAME   capture from a specific interface
+--count N          stop after N packets; 0 runs continuously
+--filter BPF       override the default ip/TCP/UDP BPF filter
+--quiet            suppress per-packet console output
+```
 
-**Darshnoor Kaur**
+Only capture traffic on a system or network you own or have explicit permission
+to monitor.
 
-B.Tech Computer Science Engineering
+## Analyze alerts from the terminal
 
-Cybersecurity Enthusiast | Python Developer | Security Monitoring & Threat Detection
+```bash
+python -m analytics.stats
+```
 
----
+Example:
 
-# Repository
+```text
+Threat statistics
+================================
+Total alerts    : 15
+Critical        : 4
+High            : 7
+Medium          : 4
+Low             : 0
+```
 
-GitHub Repository:
+## Alert schema
 
-https://github.com/darshnoor30/SentinelNet
+| Field | Meaning |
+|---|---|
+| `Timestamp` | UTC ISO-8601 observation time |
+| `SourceIP` / `DestinationIP` | Observed endpoints |
+| `Protocol` / `Port` | Transport protocol and destination port |
+| `Service` | Human-readable matched service |
+| `Severity` | Critical, High, Medium, or Low |
+| `Category` | Analyst-oriented detection category |
+| `Description` | Explainable reason the signal was raised |
+
+## Tests and quality checks
+
+```bash
+python -m pip install -r requirements-dev.txt
+ruff check .
+ruff format --check .
+pytest --cov=analytics --cov=detection_engine --cov=packet_capture --cov-report=term-missing
+```
+
+The suite covers rule matches and benign ports, CSV schema behavior, legacy
+compatibility, rolling-window scan detection, cooldown behavior, packet
+normalization, destination-port semantics, analytics, and CLI validation.
+
+## Roadmap
+
+- [ ] PCAP replay mode for fully reproducible investigations
+- [ ] SQLite/PostgreSQL storage with alert lifecycle states
+- [ ] Asset allowlists and environment-specific rule configuration
+- [ ] GeoIP and threat-intelligence enrichment with local caching
+- [ ] Authentication and role-based access for deployed dashboards
+- [ ] JSON/webhook export for SIEM and SOAR integrations
+
+## Responsible use and contributing
+
+Read [SECURITY.md](SECURITY.md) before handling telemetry or reporting a
+vulnerability. Contributions are welcome through the workflow in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Author
+
+**Darshnoor Kaur** — B.Tech Computer Science Engineering student focused on
+SOC operations, network security, and defensive Python engineering.
+
+[GitHub](https://github.com/darshnoor30) ·
+[Portfolio](https://darshnoor30.github.io/)
+
+## License
+
+Released under the [MIT License](LICENSE).

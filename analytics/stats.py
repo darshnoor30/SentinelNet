@@ -1,34 +1,51 @@
+"""Command-line alert summary for SentinelNet."""
+
+from __future__ import annotations
+
+import argparse
 import csv
+from collections import Counter
+from collections.abc import Iterable, Mapping
+from pathlib import Path
 
-ALERT_FILE = "alerts/alerts.csv"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_ALERT_FILE = PROJECT_ROOT / "alerts" / "alerts.csv"
+SEVERITY_ORDER = ("Critical", "High", "Medium", "Low")
 
-critical = 0
-high = 0
-medium = 0
 
-with open(ALERT_FILE, "r") as file:
+def load_alerts(path: str | Path = DEFAULT_ALERT_FILE) -> list[dict[str, str]]:
+    """Load alert rows, returning an empty list when no capture exists yet."""
 
-    reader = csv.DictReader(file)
+    alert_path = Path(path)
+    if not alert_path.exists():
+        return []
+    with alert_path.open("r", newline="", encoding="utf-8-sig") as handle:
+        return list(csv.DictReader(handle))
 
-    for row in reader:
 
-        severity = row["Severity"]
+def summarize_alerts(rows: Iterable[Mapping[str, str]]) -> dict[str, int]:
+    """Count alerts using a stable severity order."""
 
-        if severity == "Critical":
-            critical += 1
+    counts = Counter(row.get("Severity", "Unknown") or "Unknown" for row in rows)
+    summary = {severity: counts.pop(severity, 0) for severity in SEVERITY_ORDER}
+    summary.update(sorted(counts.items()))
+    return summary
 
-        elif severity == "High":
-            high += 1
 
-        elif severity == "Medium":
-            medium += 1
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Summarize SentinelNet alert severities")
+    parser.add_argument("--alerts", type=Path, default=DEFAULT_ALERT_FILE)
+    args = parser.parse_args()
 
-total = critical + high + medium
+    rows = load_alerts(args.alerts)
+    summary = summarize_alerts(rows)
+    print("\nThreat statistics")
+    print("=" * 32)
+    print(f"Total alerts    : {sum(summary.values())}")
+    for severity, count in summary.items():
+        print(f"{severity:<15} : {count}")
+    return 0
 
-print("\nThreat Statistics")
-print("=" * 30)
 
-print(f"Total Alerts    : {total}")
-print(f"Critical Alerts : {critical}")
-print(f"High Alerts     : {high}")
-print(f"Medium Alerts   : {medium}")
+if __name__ == "__main__":
+    raise SystemExit(main())
