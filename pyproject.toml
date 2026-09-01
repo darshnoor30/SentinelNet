@@ -24,7 +24,7 @@ classifiers = [
 ]
 dependencies = [
   "pandas>=2.2,<4",
-  "plotly>=5.24,<7",
+  "plotly>=5.24,<8",
   "scapy>=2.6,<3",
   "streamlit>=1.42,<2",
   "streamlit-autorefresh>=1.0.1,<2",
