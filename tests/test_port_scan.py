@@ -43,3 +43,33 @@ def test_reset_clears_state_and_naive_times_are_normalized() -> None:
     assert detector.observe("203.0.113.8", 80, observed_at=naive_time) is None
     detector.reset()
     assert detector.observe("203.0.113.8", 81, observed_at=naive_time) is None
+
+
+def test_idle_sources_expire_when_other_traffic_arrives() -> None:
+    detector = PortScanDetector(threshold=2, window_seconds=10, cooldown_seconds=10)
+    start = datetime(2026, 8, 18, tzinfo=timezone.utc)
+    for index in range(100):
+        source = f"192.0.2.{index}"
+        detector.observe(source, 80, observed_at=start)
+        detector.observe(source, 81, observed_at=start)
+    detector.observe("198.51.100.1", 443, observed_at=start + timedelta(seconds=11))
+    assert set(detector._observations) == {"198.51.100.1"}
+    assert detector._last_alert == {}
+
+
+def test_cleanup_preserves_unexpired_cooldown() -> None:
+    detector = PortScanDetector(threshold=2, window_seconds=10, cooldown_seconds=30)
+    start = datetime(2026, 8, 18, tzinfo=timezone.utc)
+    detector.observe("192.0.2.1", 80, observed_at=start)
+    assert detector.observe("192.0.2.1", 81, observed_at=start)
+    later = start + timedelta(seconds=11)
+    detector.observe("198.51.100.1", 443, observed_at=later)
+    assert detector.observe("192.0.2.1", 82, observed_at=later) is None
+    assert detector.observe("192.0.2.1", 83, observed_at=later) is None
+
+
+def test_cleanup_keeps_observations_at_window_boundary() -> None:
+    detector = PortScanDetector(threshold=2, window_seconds=10)
+    start = datetime(2026, 8, 18, tzinfo=timezone.utc)
+    detector.observe("192.0.2.1", 80, observed_at=start)
+    assert detector.observe("192.0.2.1", 81, observed_at=start + timedelta(seconds=10))

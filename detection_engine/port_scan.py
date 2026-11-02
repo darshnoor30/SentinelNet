@@ -35,6 +35,25 @@ class PortScanDetector:
         self.cooldown_seconds = cooldown_seconds
         self._observations: dict[str, dict[int, datetime]] = defaultdict(dict)
         self._last_alert: dict[str, datetime] = {}
+        self._last_cleanup: datetime | None = None
+
+    def _prune_inactive(self, now: datetime) -> None:
+        """Expire idle sources periodically as new traffic arrives."""
+        window = timedelta(seconds=self.window_seconds)
+        if self._last_cleanup is not None and now - self._last_cleanup < window:
+            return
+        cutoff = now - window
+        for source, ports in list(self._observations.items()):
+            active = {port: seen for port, seen in ports.items() if seen >= cutoff}
+            if active:
+                self._observations[source] = active
+            else:
+                del self._observations[source]
+        cooldown_cutoff = now - timedelta(seconds=self.cooldown_seconds)
+        for source, alerted_at in list(self._last_alert.items()):
+            if alerted_at <= cooldown_cutoff:
+                del self._last_alert[source]
+        self._last_cleanup = now
 
     def observe(
         self,
@@ -48,6 +67,8 @@ class PortScanDetector:
         now = observed_at or datetime.now(timezone.utc)
         if now.tzinfo is None:
             now = now.replace(tzinfo=timezone.utc)
+
+        self._prune_inactive(now)
 
         cutoff = now - timedelta(seconds=self.window_seconds)
         observations = self._observations[source_ip]
@@ -72,6 +93,7 @@ class PortScanDetector:
 
         self._observations.clear()
         self._last_alert.clear()
+        self._last_cleanup = None
 
 
 _default_detector = PortScanDetector()
